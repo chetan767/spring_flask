@@ -41,7 +41,6 @@ UPLOAD_FOLDER = 'qr_codes'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-
 @app.route('/')
 def index():
     return jsonify({"hello": "spring"})
@@ -161,6 +160,26 @@ def generate_qr_code(user_id, address):
         with open(f"qr_codes/{user_id}.png", "wb") as f:
             f.write(response.content)
 
+        
+    
+
+# QR Code Generation API - mongodb trigger
+@app.route('/users/qr', methods=['POST'])
+def generate_qr_code():
+    try:
+        data = request.json
+        print(data)
+        user_id = str(data['_id'])
+        url = f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={data['address']}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            os.makedirs("qr_codes", exist_ok=True)
+            with open(f"qr_codes/{user_id}.png", "wb") as f:
+                f.write(response.content)
+            return jsonify({"message": "QR Code generated", }), 200
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}), 404
+
 
 # Route to retrieve the uploaded image
 @app.route('/uploads/<filename>', methods=['GET'])
@@ -241,7 +260,3 @@ def select_winner():
             f"Winner selected: {winner['name']} with {points} points at {timestamp}")
     else:
         print("No winner selected due to a tie or insufficient users")
-
-
-
-
