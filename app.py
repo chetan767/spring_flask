@@ -40,7 +40,15 @@ winners_collection = db['Winners']
 UPLOAD_FOLDER = 'qr_codes'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
+
+@app.route('/')
+def index():
+    return jsonify({"hello": "spring"})
+
+
 # get users api
+
 @app.route("/users", methods=["GET"])
 def get_users():
     sort_by = request.args.get("sort_by", "points")
