@@ -169,7 +169,7 @@ def generate_qr_code():
     try:
         data = request.json
         print(data)
-        user_id = str(data['_id'])
+        user_id = str(data['user_id'])
         url = f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={data['address']}"
         response = requests.get(url)
         if response.status_code == 200:
