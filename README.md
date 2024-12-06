@@ -7,7 +7,7 @@ This is a Flask application for leaderboard management with MongoDB integration,
 
 ## Prerequisites
 
-- Python 3.7+
+- Python 3.10+
 - MongoDB
 - pip (Python package installer)
 
