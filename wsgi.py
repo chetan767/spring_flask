@@ -11,10 +11,10 @@ def start_change_stream_thread():
 
 def add_sched():
     sched = BackgroundScheduler(daemon=True)
-    sched.add_job(select_winner, 'interval', seconds=10)
+    sched.add_job(select_winner, 'interval', seconds=300)
     sched.start()
 
 if __name__ == "__main__":
     start_change_stream_thread()
     add_sched()
-    app.run(debug=True)
+    app.run()

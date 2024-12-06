@@ -238,8 +238,6 @@ def select_winner():
         winner = top_users[0]
         winner_id = winner["_id"]
         points = winner["points"]
-        timestamp = time
-
         winners_collection.insert_one({
             "user_id": winner_id,
             "points": points,
@@ -247,6 +245,6 @@ def select_winner():
         })
 
         print(
-            f"Winner selected: {winner['name']} with {points} points at {timestamp}")
+            f"Winner selected: {winner['name']} with {points} points")
     else:
         print("No winner selected due to a tie or insufficient users")
