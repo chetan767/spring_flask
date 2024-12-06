@@ -18,9 +18,6 @@ from pymongo.errors import ConnectionFailure
 import time
 
 
-def sensor():
-    """ Function for test purposes. """
-    print("Scheduler is alive!")
 
 
 app = Flask(__name__)
@@ -91,7 +88,6 @@ def add_user():
     )
     item = user.to_dict()
     result = users_collection.insert_one(item)
-    print(result)
     item['_id'] = str(result.inserted_id)
     return jsonify(item), 200
 
@@ -115,7 +111,6 @@ def update_points(user_id):
         {"_id": ObjectId(user_id)},
         {"$inc": {"points": points_change}}
     )
-    print(result)
     if result.modified_count:
         return jsonify({"message": "Points updated", }), 200
     return jsonify({"error": "User not found"}), 404
@@ -168,7 +163,6 @@ def generate_qr_code(user_id, address):
 def generate_qr_code():
     try:
         data = request.json
-        print(data)
         user_id = str(data['user_id'])
         url = f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={data['address']}"
         response = requests.get(url)
@@ -230,7 +224,6 @@ def listen_for_changes():
         with users_collection.watch() as stream:
             for change in stream:
                 if change['operationType'] == 'insert':
-                    print(f"Change detected: {change}")
                     item = change['fullDocument']
                     generate_qr_code(str(item['_id']), item['address'])
                 # You can handle the change event here (e.g., send it to a front-end via WebSocket)
@@ -238,10 +231,7 @@ def listen_for_changes():
         print(f"Error listening to change stream: {e}")
 
 # Winner Selection Job
-
-
 def select_winner():
-    print("test")
     top_users = list(users_collection.find().sort("points", -1).limit(2))
 
     if len(top_users) > 1 and top_users[0]["points"] > top_users[1]["points"]:

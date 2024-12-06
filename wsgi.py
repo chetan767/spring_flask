@@ -1,7 +1,7 @@
 import threading
 from app import app,listen_for_changes
 from apscheduler.schedulers.background import BackgroundScheduler
-
+from app import select_winner
 def start_change_stream_thread():
     change_stream_thread = threading.Thread(target=listen_for_changes)
     change_stream_thread.daemon = True
@@ -11,7 +11,7 @@ def start_change_stream_thread():
 
 def add_sched():
     sched = BackgroundScheduler(daemon=True)
-    # sched.add_job(select_winner, 'interval', seconds=10)
+    sched.add_job(select_winner, 'interval', seconds=10)
     sched.start()
 
 if __name__ == "__main__":
